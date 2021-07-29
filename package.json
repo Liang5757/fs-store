@@ -1,8 +1,9 @@
 {
   "name": "fs-localstorage",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "description": "A store that imitates the style of localstorage api is based on fs",
-  "main": "src/fs-store.ts",
+  "main": "lib/fs-store.js",
+  "types": "lib/fs-store.d.ts",
   "scripts": {
     "test": "jest",
     "build": "tsc"
