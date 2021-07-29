@@ -4,10 +4,18 @@
   "description": "A store that imitates the style of localstorage api is based on fs",
   "main": "src/fs-store.ts",
   "scripts": {
-    "test": "jest"
+    "test": "jest",
+    "build": "tsc"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Liang5757/fs-store.git"
   },
   "author": "liang5757",
   "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Liang5757/fs-store/issues"
+  },
   "devDependencies": {
     "@types/jest": "^26.0.24",
     "@types/node": "^16.4.6",
