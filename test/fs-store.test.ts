@@ -1,10 +1,10 @@
 import LocalStorage = require('../src/fs-store');
 
 describe('base test', () => {
-  const localStorage = new LocalStorage('./scratch', 1000000);
+  const localStorage = new LocalStorage('./store', 1000000);
 
   test('location', () => {
-    expect(localStorage.location).toEqual('./scratch');
+    expect(localStorage.location).toEqual('./store');
   });
 
   test('string type', () => {

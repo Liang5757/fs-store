@@ -1,5 +1,5 @@
 {
-  "name": "fs-store",
+  "name": "fs-localstorage",
   "version": "1.0.0",
   "description": "A store that imitates the style of localstorage api is based on fs",
   "main": "src/fs-store.ts",
