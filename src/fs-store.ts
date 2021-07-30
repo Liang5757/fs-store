@@ -30,20 +30,23 @@ class LocalStorage {
   bytesInUse!: number;
   length!: number;
 
+  [propName: string]: any;
+
   constructor (location: string, maxSize: number) {
     if (LocalStorage.instance) {
       return LocalStorage.instance;
     }
-    LocalStorage.instance = this;
 
     this.metaKeyMap = Object.create(null);
     this.keys = [];
-    this.location = location;
+    this.location = path.resolve(location);
     this.maxSize = maxSize;
     this.bytesInUse = 0;
     this.length = 0;
 
     this.init();
+
+    return LocalStorage.instance = this.setProxy();
   }
 
   private init () {
@@ -70,6 +73,26 @@ class LocalStorage {
     }
   }
 
+  private setProxy () {
+    return new Proxy(this, {
+      set<T> (target: LocalStorage, key: string, value: T) {
+        debugger
+        if (key in target) {
+          target[key] = value
+        } else {
+          target.setItem(key, value);
+        }
+        return true;
+      },
+      get (target: LocalStorage, key: string) {
+        if (key in target) {
+          return target[key];
+        }
+        return target.getItem(key);
+      }
+    });
+  }
+
   private getStat (key = '') {
     const filename = path.join(this.location, encodeURIComponent(key));
     try {
@@ -79,7 +102,7 @@ class LocalStorage {
     }
   }
 
-  setItem<T> (key: string, value: T) {
+  setItem<T> (key: string, value: T): void {
     const encodedKey = encodeURIComponent(key).replace(/[!'()]/g, escape).replace(/\*/g, '%2A');
     const valueString = JSON.stringify(value);
     const valueStringLength = valueString.length;
@@ -90,7 +113,6 @@ class LocalStorage {
     if (this.bytesInUse + lengthChange > this.maxSize) {
       throw new Error('Maximum size limit exceeded!');
     }
-
     const filename = path.join(this.location, encodedKey);
     writeSync(filename, valueString, { encoding: 'utf-8' });
     if (!metaKey) { // if the key is not exists before set
