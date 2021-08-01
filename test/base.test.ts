@@ -37,6 +37,11 @@ describe('base test', () => {
     expect(localStorage.keys).toEqual(['1', '3']);
   });
 
+  test('empty string key', () => {
+    localStorage.setItem('', 'empty key');
+    expect(localStorage.getItem('')).toBe('empty key');
+  })
+
   test('clear', () => {
     localStorage.clear();
     expect(localStorage.length).toBe(0);

@@ -3,10 +3,12 @@ const fs = require('fs');
 const writeSync = require('write-file-atomic').sync;
 const { rm, emptyDirectory } = require('./utils');
 
+const EMPTY_KEY_FOLDER_NAME = '__EMPTY_KEY_FOLDER_NAME__';
+
 interface MetaKey {
   key: string,
   index: number,
-  size?: number,
+  size: number,
 }
 
 type MetaKeyMap = {
@@ -18,6 +20,14 @@ class MetaKey {
     this.key = key;
     this.index = index;
     this.size = size;
+  }
+}
+
+function _escapeKey (key: string | number) {
+  if (key === '') {
+    return EMPTY_KEY_FOLDER_NAME;
+  } else {
+    return `${key}`;
   }
 }
 
@@ -76,9 +86,8 @@ class LocalStorage {
   private setProxy () {
     return new Proxy(this, {
       set<T> (target: LocalStorage, key: string, value: T) {
-        debugger
         if (key in target) {
-          target[key] = value
+          target[key] = value;
         } else {
           target.setItem(key, value);
         }
@@ -93,7 +102,8 @@ class LocalStorage {
     });
   }
 
-  private getStat (key = '') {
+  private getStat (key: string | number = '') {
+    key = _escapeKey(key);
     const filename = path.join(this.location, encodeURIComponent(key));
     try {
       return fs.statSync(filename);
@@ -102,7 +112,8 @@ class LocalStorage {
     }
   }
 
-  setItem<T> (key: string, value: T): void {
+  setItem<T> (key: string | number, value: T): void {
+    key = _escapeKey(key);
     const encodedKey = encodeURIComponent(key).replace(/[!'()]/g, escape).replace(/\*/g, '%2A');
     const valueString = JSON.stringify(value);
     const valueStringLength = valueString.length;
@@ -122,7 +133,8 @@ class LocalStorage {
     this.bytesInUse += lengthChange;
   }
 
-  getItem (key: string) {
+  getItem (key: string | number) {
+    key = _escapeKey(key);
     const metaKey = this.metaKeyMap[key];
     if (!!metaKey) {
       const filename = path.join(this.location, metaKey.key);
@@ -132,6 +144,7 @@ class LocalStorage {
   }
 
   removeItem (key: string) {
+    key = _escapeKey(key);
     const metaKey = this.metaKeyMap[key];
     if (metaKey) {
       delete this.metaKeyMap[key];

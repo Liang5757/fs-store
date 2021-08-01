@@ -13,6 +13,12 @@ describe.only('dot test', () => {
     expect(localStorage.getItem('a')).toEqual('something');
   });
 
+  test('empty string', () => {
+    localStorage[''] = 'empty string';
+    expect(localStorage['']).toEqual('empty string');
+    expect(localStorage.getItem('')).toEqual('empty string');
+  });
+
   test('dot', () => {
     localStorage.b = 1;
     expect(localStorage['b']).toEqual(1);
