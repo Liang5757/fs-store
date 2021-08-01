@@ -42,7 +42,7 @@ class LocalStorage {
 
   [propName: string]: any;
 
-  constructor (location: string, maxSize: number) {
+  constructor (location: string, maxSize: number = 5 * 1024 * 1024) {
     if (LocalStorage.instance) {
       return LocalStorage.instance;
     }
