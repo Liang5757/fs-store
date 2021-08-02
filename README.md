@@ -2,6 +2,12 @@
 
 fs-localstorage是一个基于fs文件存储的、提供localstorage api风格的存储库
 
+## 安装
+
+```bash
+npm i fs-localstorage -save
+```
+
 ##  使用方式
 
 1.创建实例，第一个参数是存储路径，第二个参数设置仓库容量大小（bytes）默认为5MB
